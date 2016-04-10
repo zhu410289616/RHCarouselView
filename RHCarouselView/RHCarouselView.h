@@ -14,6 +14,15 @@ typedef NS_ENUM(NSInteger, RHCarouselDirection) {
     RHCarouselDirectionRight = 2
 };
 
+@protocol RHCarouselViewDelegate <NSObject>
+
+@required
+
+- (NSUInteger)numberOfImages;
+- (UIImage *)imageForIndex:(NSUInteger)index;
+
+@end
+
 @interface RHCarouselView : UIView <UIScrollViewDelegate>
 
 @property (nonatomic, strong, readonly) UIScrollView *contentScrollView;
@@ -22,12 +31,14 @@ typedef NS_ENUM(NSInteger, RHCarouselDirection) {
 
 @property (nonatomic, assign, readonly) CGFloat width;
 @property (nonatomic, assign, readonly) CGFloat height;
+
+@property (nonatomic, weak) id<RHCarouselViewDelegate> delegate;
+
 @property (nonatomic, assign) RHCarouselDirection direction;
 @property (nonatomic, assign) NSInteger currentIndex;
 @property (nonatomic, assign, readonly) NSInteger nextIndex;
 
-@property (nonatomic, strong, readonly) NSMutableArray *images;
-
+//auto scroll
 @property (nonatomic, strong) NSTimer *autoScrollTimer;
 @property (nonatomic, assign) BOOL autoScrollEnabled;
 @property (nonatomic, assign) NSTimeInterval autoScrollTimeInterval;

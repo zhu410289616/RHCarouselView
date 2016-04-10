@@ -42,9 +42,6 @@
         //
         [self addObserver:self forKeyPath:@"direction" options:NSKeyValueObservingOptionNew context:nil];
         
-        //
-        _images = [[NSMutableArray alloc] init];
-        
     }
     return self;
 }
@@ -62,15 +59,17 @@
         return;
     }
     
+    NSUInteger imageCount = [self.delegate numberOfImages];
+    
     if ([change[NSKeyValueChangeNewKey] intValue] == RHCarouselDirectionLeft) {
         _otherImageView.frame = CGRectMake(CGRectGetMaxX(_currentImageView.frame), 0, _width, _height);
-        _nextIndex = (_currentIndex + 1) % _images.count;
+        _nextIndex = (_currentIndex + 1) % imageCount;
     } else if ([change[NSKeyValueChangeNewKey] intValue] == RHCarouselDirectionRight) {
         _otherImageView.frame = CGRectMake(0, 0, _width, _height);
-        _nextIndex = (_currentIndex - 1 < 0) ? (_images.count - 1) : (_currentIndex - 1);
+        _nextIndex = (_currentIndex - 1 < 0) ? (imageCount - 1) : (_currentIndex - 1);
     }
     
-    _otherImageView.image = _images[_nextIndex];
+    _otherImageView.image = [self.delegate imageForIndex:_nextIndex];
 }
 
 #pragma mark - UIScrollViewDelegate
@@ -124,7 +123,7 @@
     _currentIndex = currentIndex;
     
     _currentImageView.frame = CGRectMake(_width, 0, _width, _height);
-    _currentImageView.image = _images[_currentIndex];
+    _currentImageView.image = [self.delegate imageForIndex:_currentIndex];
     _contentScrollView.contentOffset = CGPointMake(_width, 0);
 }
 
@@ -143,7 +142,7 @@
     [self stopAutoScrollTimer];
     
     //只有一张图片，不开定时器，直接返回
-    if (_images.count <= 1) {
+    if ([self.delegate numberOfImages] <= 1) {
         return;
     }
     

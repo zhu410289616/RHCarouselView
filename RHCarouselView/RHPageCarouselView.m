@@ -16,7 +16,7 @@
         
         //
         _cursorPageControl = [[UIPageControl alloc] init];
-        _cursorPageControl.frame = CGRectMake(0, self.height - 30, self.width, 30);
+        _cursorPageControl.frame = CGRectMake(0, self.height - 20, self.width, 20);
         _cursorPageControl.pageIndicatorTintColor = [UIColor whiteColor];
         _cursorPageControl.currentPageIndicatorTintColor = [UIColor lightGrayColor];
         [_cursorPageControl addTarget:self action:@selector(doPageControlChanged:) forControlEvents:UIControlEventTouchUpInside];
@@ -30,7 +30,7 @@
 {
     [super setCurrentIndex:currentIndex];
     
-    _cursorPageControl.numberOfPages = self.images.count;
+    _cursorPageControl.numberOfPages = [self.delegate numberOfImages];
     _cursorPageControl.currentPage = self.currentIndex;
 }
 
